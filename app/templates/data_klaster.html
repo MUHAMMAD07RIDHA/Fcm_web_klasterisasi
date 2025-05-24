@@ -1,0 +1,168 @@
+{% extends "base.html" %} {% block title %}Data Klaster{% endblock %} {% block
+content %}
+<div class="space-y-8 min-h-screen">
+  <!-- Hasil Clustering -->
+  <div class="bg-white rounded-lg shadow-lg p-8">
+    <h1 class="text-3xl font-bold text-lime-600 mb-6">Hasil Clustering FCM</h1>
+
+    <div class="flex items-center justify-center gap-12 mb-8">
+      <!-- Ringkasan -->
+      <div class="grid grid-cols-3 gap-6 max-w-[900px] w-full text-left">
+        {% for tingkat, jumlah in cluster_counts.items() %}
+        <div class="bg-lime-50 p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-semibold text-lime-800 mb-2">
+            Tingkat {{ tingkat }}
+          </h3>
+          <p class="text-3xl font-bold text-lime-600">{{ jumlah }}</p>
+          <p class="text-gray-600">daerah</p>
+        </div>
+        {% endfor %}
+      </div>
+      <!-- Grafik -->
+      <div
+        id="clusterPieChart"
+        class="w-[300px] h-[260px] overflow-hidden"
+      ></div>
+    </div>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+      const clusterData = {{ cluster_counts | tojson | safe }};
+      const labels = Object.keys(clusterData);
+      const values = Object.values(clusterData);
+
+      const data = [{
+        labels: labels,
+        values: values,
+        type: 'pie',
+        marker: {
+          colors: ['#8bc34a', '#FFF085', '#ff0000']
+        },
+        textinfo: 'label+percent',
+        hoverinfo: 'label+value+percent'
+      }];
+
+      const layout = {
+        width: 300,
+        height: 300,
+        margin: { t: 0, b: 0, l: 0, r: 0 },
+      };
+
+      Plotly.newPlot('clusterPieChart', data, layout);
+    </script>
+
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold text-lime-600">Data Hasil Clustering</h2>
+      <a
+        href="{{ url_for('main.tambah_data') }}"
+        class="bg-lime-600 text-white px-4 py-2 rounded hover:bg-lime-700 transition duration-200"
+      >
+        Tambah Data
+      </a>
+    </div>
+
+    <!-- Tabel Hasil -->
+    <div class="overflow-x-auto">
+      <table
+        class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden"
+      >
+        <thead>
+          <tr class="bg-lime-600 text-white">
+            <th class="py-3 px-4 border-b-2 border-gray-300">No</th>
+            <th class="py-3 px-4 border-b-2 border-gray-300">
+              Puskesmas/Kecamatan
+            </th>
+            <th class="py-3 px-4 border-b-2 border-gray-300">
+              Tingkat Kerawanan
+            </th>
+            <th class="py-3 px-4 border-b-2 border-gray-300">
+              Nilai Keanggotaan
+            </th>
+            <th class="py-3 px-4 border-b-2 border-gray-300">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in data %}
+          <tr class="hover:bg-gray-50 transition duration-200 ease-in-out">
+            <td class="py-2 px-4 border-b text-center">{{ loop.index }}</td>
+            <td class="py-2 px-4 border-b">{{ item.puskesmas_kecamatan }}</td>
+            <td class="py-2 px-4 border-b">
+              <span
+                class="px-3 py-1 rounded-full text-white {% if item.tingkat_kerawanan == 'Rendah' %} bg-green-500 {% elif item.tingkat_kerawanan == 'Sedang' %} bg-yellow-500 {% else %} bg-red-500 {% endif %}"
+              >
+                {{ item.tingkat_kerawanan }}
+              </span>
+            </td>
+            <td class="py-2 px-4 border-b">
+              <div class="space-y-1">
+                <div class="text-sm">
+                  Cluster 1: {{ "%.3f"|format(item.membership_values[0]) }}
+                </div>
+                <div class="text-sm">
+                  Cluster 2: {{ "%.3f"|format(item.membership_values[1]) }}
+                </div>
+                <div class="text-sm">
+                  Cluster 3: {{ "%.3f"|format(item.membership_values[2]) }}
+                </div>
+              </div>
+            </td>
+            <td class="py-2 px-4 border-b">
+              <div class="flex space-x-2">
+                <a
+                  href="{{ url_for('main.edit_data', id=item.id) }}"
+                  class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition duration-200"
+                >
+                  Edit
+                </a>
+                <a
+                  href="{{ url_for('main.hapus_data', id=item.id) }}"
+                  onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"
+                  class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition duration-200"
+                >
+                  Hapus
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pusat Cluster -->
+  <div class="bg-white rounded-lg shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-lime-600 mb-6">Pusat Cluster</h2>
+    <div class="overflow-x-auto">
+      <table
+        class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden"
+      >
+        <thead>
+          <tr class="bg-lime-600 text-white">
+            <th class="py-3 px-4 border-b-2 border-gray-300">Cluster</th>
+            <th class="py-3 px-4 border-b-2 border-gray-300">Sasaran Balita</th>
+            <th class="py-3 px-4 border-b-2 border-gray-300">Balita Entry</th>
+            <th class="py-3 px-4 border-b-2 border-gray-300">Persentase</th>
+            <th class="py-3 px-4 border-b-2 border-gray-300">Stunting</th>
+            <th class="py-3 px-4 border-b-2 border-gray-300">Wasting</th>
+            <th class="py-3 px-4 border-b-2 border-gray-300">Underweight</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in range(3) %}
+          <tr
+            class="hover:bg-gray-50 transition duration-200 ease-in-out text-center"
+          >
+            <td class="py-2 px-4 border-b text-center">{{ i + 1 }}</td>
+            {% for val in centers[i] %}
+            <td class="py-2 px-4 border-b text-right">
+              {{ "%.2f"|format(val) }}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

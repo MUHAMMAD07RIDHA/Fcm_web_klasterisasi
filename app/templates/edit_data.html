@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% block title %}Edit Data{% endblock %} {% block content %}
+<div class="min-h-screen">
+  <div class="bg-white rounded-lg shadow-lg p-8">
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-lime-600">Edit Data</h1>
+      <p class="text-gray-600 mt-2">Edit data penyakit untuk {{ data.puskesmas_kecamatan }}</p>
+    </div>
+
+    <form action="{{ url_for('main.edit_data', id=data.id) }}" method="POST" class="space-y-6">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Puskesmas/Kecamatan</label>
+          <input type="text" name="puskesmas" value="{{ data.puskesmas_kecamatan }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Sasaran Balita E-PPGBM</label>
+          <input type="number" name="sasaran" value="{{ data.sasaran_balita_eppgbm }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Balita Entry</label>
+          <input type="number" name="balita_entry" value="{{ data.balita_entry_2023 }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Persentase</label>
+          <input type="number" name="persentase" value="{{ data.persentase }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Stunting</label>
+          <input type="number" name="stunting" value="{{ data.stunting }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Wasting</label>
+          <input type="number" name="wasting" value="{{ data.wasting }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Underweight</label>
+          <input type="number" name="underweight" value="{{ data.underweight }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-3">
+        <a href="{{ url_for('main.data_klaster') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"> Batal </a>
+        <button type="submit" class="bg-lime-600 text-white px-4 py-2 rounded hover:bg-lime-700">Simpan Perubahan</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% block title %}Tambah Data{% endblock %} {% block content %}
+<div class="min-h-screen">
+  <div class="bg-white rounded-lg shadow-lg p-8">
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-lime-600">Tambah Data Baru</h1>
+      <p class="text-gray-600 mt-2">Masukkan data penyakit untuk daerah baru</p>
+    </div>
+
+    <form action="{{ url_for('main.tambah_data') }}" method="POST" class="space-y-6">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Puskesmas/Kecamatan</label>
+          <input type="text" name="puskesmas" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Sasaran Balita E-PPGBM</label>
+          <input type="number" name="sasaran" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Balita Entry</label>
+          <input type="number" name="balita_entry" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Persentase</label>
+          <input type="number" name="persentase" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Stunting</label>
+          <input type="number" name="stunting" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Wasting</label>
+          <input type="number" name="wasting" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Underweight</label>
+          <input type="number" name="underweight" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-3">
+        <a href="{{ url_for('main.data_klaster') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"> Batal </a>
+        <button type="submit" class="bg-lime-600 text-white px-4 py-2 rounded hover:bg-lime-700">Simpan Data</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% block title %}Validasi Klaster{% endblock %} {% block content %}
+<div class="space-y-8 min-h-screen">
+  <div class="bg-white rounded-lg shadow-lg p-8">
+    <h1 class="text-3xl font-bold text-lime-600 mb-6">Validasi Klaster</h1>
+
+    <!-- Grafik Bar Chart -->
+    <div class="h-96" id="validationChart"></div>
+
+    <!-- Penjelasan Metrik -->
+    <div class="mt-8 grid md:grid-cols-3 gap-6">
+      <div class="bg-lime-50 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold text-lime-800 mb-2">Silhouette Score</h3>
+        <p class="text-gray-700">Mengukur seberapa baik setiap objek cocok dengan clusternya. Rentang nilai -1 hingga 1, dimana nilai yang lebih tinggi menandakan cluster yang lebih baik.</p>
+      </div>
+
+      <div class="bg-lime-50 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold text-lime-800 mb-2">Partition Coefficient</h3>
+        <p class="text-gray-700">Mengukur jumlah overlapping antar cluster. Rentang nilai 0 hingga 1, nilai yang lebih tinggi menandakan clustering yang lebih baik.</p>
+      </div>
+
+      <div class="bg-lime-50 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold text-lime-800 mb-2">Partition Entropy</h3>
+        <p class="text-gray-700">Mengukur keacakan dalam pengelompokan. Nilai yang lebih rendah menandakan clustering yang lebih baik.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Plotly.js -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+  const data = [{
+      x: {{ validation_data.indeks|tojson }},
+      y: {{ validation_data.nilai|tojson }},
+      type: 'bar',
+      marker: {
+          color: ['#65a30d', '#65a30d', '#65a30d']
+      }
+  }];
+
+  const layout = {
+      title: 'Validasi Indeks Clustering',
+      xaxis: {
+          title: 'Metrik Validasi'
+      },
+      yaxis: {
+          title: 'Nilai'
+      }
+  };
+
+  Plotly.newPlot('validationChart', data, layout);
+</script>
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock %} - Sistem FCM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    <script>
+      function toggleDropdown(id) {
+        const dropdown = document.getElementById(id);
+        dropdown.classList.toggle('hidden');
+      }
+    </script>
+  </head>
+  <body class="bg-gray-100 font-[Inter]">
+    <!-- Navbar -->
+    <nav class="bg-lime-600 text-white shadow-lg">
+      <div class="container mx-auto p-4">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center">
+            <a href="/" class="text-xl font-bold">Sistem FCM</a>
+          </div>
+          {% if session.user_id %}
+          <div class="flex space-x-4">
+            <a href="/" class="hover:bg-lime-700 px-3 py-2 rounded">Home</a>
+            <a href="/data-awal" class="hover:bg-lime-700 px-3 py-2 rounded">Data Awal</a>
+
+            <!-- Klasterisasi Dropdown -->
+            <div class="relative">
+              <button onclick="toggleDropdown('klasterDropdown')" class="hover:bg-lime-700 px-3 py-2 rounded flex items-center">
+                Data
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div id="klasterDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white text-gray-700 rounded-md shadow-lg">
+                <a href="/data-klaster" class="block px-4 py-2">Data Klaster</a>
+                <a href="/validasi-klaster" class="block px-4 py-2">Validasi Klaster</a>
+                <a href="/summary-klaster" class="block px-4 py-2">Summary Klaster</a>
+              </div>
+            </div>
+
+            <!-- User Menu -->
+            <div class="relative ml-4">
+              <button onclick="toggleDropdown('userDropdown')" class="hover:bg-lime-700 px-3 py-2 rounded flex items-center">
+                {{ session.username }}
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white text-gray-700 rounded-md shadow-lg">
+                <a href="{{ url_for('main.logout') }}" class="block px-4 py-2 text-red-600">Logout</a>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container mx-auto px-4 py-8">{% block content %}{% endblock %}</div>
+
+    <!-- Footer -->
+    <footer class="bg-lime-600 text-white py-4 mt-8">
+      <div class="container mx-auto px-4 text-center">
+        <p>&copy; 2024 Sistem FCM. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Close dropdowns when clicking outside -->
+    <script>
+      window.onclick = function (event) {
+        if (!event.target.matches('button')) {
+          const dropdowns = document.getElementsByClassName('absolute');
+          for (let dropdown of dropdowns) {
+            if (!dropdown.classList.contains('hidden')) {
+              dropdown.classList.add('hidden');
+            }
+          }
+        }
+      };
+    </script>
+  </body>
+</html>

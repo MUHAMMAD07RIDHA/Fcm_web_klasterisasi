@@ -1,0 +1,38 @@
+{% extends "base.html" %} {% block title %}Data Awal{% endblock %} {% block content %}
+<div class="bg-white rounded-lg shadow-lg p-8 min-h-screen">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-lime-600">Data Awal</h1>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden">
+      <thead>
+        <tr class="bg-lime-600 text-white">
+          <th class="py-3 px-4 border-b-2 border-gray-300">No</th>
+          <th class="py-3 px-4 border-b-2 border-gray-300">Puskesmas/Kecamatan</th>
+          <th class="py-3 px-4 border-b-2 border-gray-300">Sasaran Balita E-PPGBM</th>
+          <th class="py-3 px-4 border-b-2 border-gray-300">Balita Entry</th>
+          <th class="py-3 px-4 border-b-2 border-gray-300">Persentase (%)</th>
+          <th class="py-3 px-4 border-b-2 border-gray-300">Stunting</th>
+          <th class="py-3 px-4 border-b-2 border-gray-300">Wasting</th>
+          <th class="py-3 px-4 border-b-2 border-gray-300">Underweight</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in data %}
+        <tr class="hover:bg-gray-50 transition duration-200 ease-in-out">
+          <td class="py-2 px-4 border-b text-center">{{ loop.index }}</td>
+          <td class="py-2 px-4 border-b">{{ item.puskesmas_kecamatan }}</td>
+          <td class="py-2 px-4 border-b text-right">{{ item.sasaran_balita_eppgbm }}</td>
+          <td class="py-2 px-4 border-b text-right">{{ item.balita_entry_2023 }}</td>
+          <td class="py-2 px-4 border-b text-right">{{ item.persentase }}</td>
+          <td class="py-2 px-4 border-b text-right">{{ item.stunting }}</td>
+          <td class="py-2 px-4 border-b text-right">{{ item.wasting }}</td>
+          <td class="py-2 px-4 border-b text-right">{{ item.underweight }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

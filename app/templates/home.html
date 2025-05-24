@@ -1,0 +1,120 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<div class="min-h-screen">
+  <div class="space-y-8">
+    <!-- Statistik Utama -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-gray-500 text-sm font-semibold">Total Daerah</h3>
+        <p class="text-3xl font-bold text-lime-600">{{ total_daerah }}</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-gray-500 text-sm font-semibold">Total Stunting</h3>
+        <p class="text-3xl font-bold text-red-600">
+          {{ totals.total_stunting }}
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-gray-500 text-sm font-semibold">Total Wasting</h3>
+        <p class="text-3xl font-bold text-yellow-600">
+          {{ totals.total_wasting }}
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-gray-500 text-sm font-semibold">Total Underweight</h3>
+        <p class="text-3xl font-bold text-green-600">
+          {{ totals.total_underweight }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Grafik dan Info -->
+    <div class="flex flex-col gap-6">
+      <!-- Grafik -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">
+          Daerah dengan Kasus Terbanyak
+        </h2>
+        <div class="h-[25rem]" id="barChart"></div>
+      </div>
+
+      <!-- Info Sistem -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Tentang Sistem</h2>
+        <p class="text-gray-600 mb-4">
+          Sistem ini menggunakan metode Fuzzy C-Means untuk klasterisasi daerah
+          kerawanan stunting berdasarkan Status gizi dari data
+          E-PPGBM(electronic Pencatatan dan Pelaporan Gizi Berbasis Masyarakat)
+          Dinas Kesehatan aceh Utara Tahun 2023.Analisis ini membantu dalam
+          mengidentifikasi daerah-daerah yang memerlukan perhatian khusus dalam
+          penanganan daerah rawan stunting
+        </p>
+        <div class="space-y-4">
+          <div class="p-4 bg-lime-50 rounded-lg">
+            <h3 class="font-semibold text-lime-800 mb-2">
+              Indikator yang Dianalisis:
+            </h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-1">
+              <li>Stunting (Tinggi badan menurut umur)</li>
+              <li>Wasting (Berat badan menurut tinggi badan)</li>
+              <li>Underweight (Berat badan menurut umur)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Plotly.js -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+  const chartData = {
+      labels: {{ chart_data.labels|tojson }},
+      stunting: {{ chart_data.stunting|tojson }},
+      wasting: {{ chart_data.wasting|tojson }},
+      underweight: {{ chart_data.underweight|tojson }}
+  };
+
+  const trace1 = {
+      x: chartData.labels,
+      y: chartData.stunting,
+      name: 'Stunting',
+      type: 'bar',
+      marker: {color: '#ff0000'}
+  };
+
+  const trace2 = {
+      x: chartData.labels,
+      y: chartData.wasting,
+      name: 'Wasting',
+      type: 'bar',
+      marker: {color: '#FFF085'}
+  };
+
+  const trace3 = {
+      x: chartData.labels,
+      y: chartData.underweight,
+      name: 'Underweight',
+      type: 'bar',
+      marker: {color: '#3A6351'}
+  };
+
+  const layout = {
+      barmode: 'group',
+      margin: { t: 20 },
+      legend: {
+          orientation: 'h',
+          y: 1.1
+      },
+      xaxis: {
+          tickangle: -45
+      }
+  };
+
+  Plotly.newPlot('barChart', [trace1, trace2, trace3], layout, {responsive: true});
+</script>
+{% endblock %}

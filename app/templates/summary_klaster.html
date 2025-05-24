@@ -1,0 +1,75 @@
+{% extends "base.html" %} {% block title %}Summary Klaster{% endblock %} {% block content %}
+<div class="min-h-[80vh]">
+  <div class="space-y-8">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+      <h1 class="text-3xl font-bold text-lime-600 mb-6">Summary Klaster</h1>
+
+      <!-- Jumlah Daerah per Klaster -->
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+        {% for cluster, count in cluster_counts.items() %}
+        <div class="bg-lime-50 p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-semibold text-lime-800 mb-2">Klaster {{ cluster + 1 }} ({{ tingkat_kerawanan[cluster] }})</h3>
+          <p class="text-3xl font-bold text-lime-600">{{ count }}</p>
+          <p class="text-gray-600">daerah</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Rata-rata Nilai per Klaster -->
+      <div class="overflow-x-auto mt-6">
+        <table class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden">
+          <thead>
+            <tr class="bg-lime-600 text-white">
+              <th class="py-3 px-4 border-b-2 border-gray-300">Variabel</th>
+              {% for i in range(3) %}
+              <th class="py-3 px-4 border-b-2 border-gray-300">
+                Klaster {{ i + 1 }}
+                <span class="block text-sm">({{ tingkat_kerawanan[i] }})</span>
+              </th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="hover:bg-gray-50 transition duration-200 ease-in-out">
+              <td class="py-2 px-4 border-b font-medium">Sasaran Balita E-PPGBM</td>
+              {% for i in range(3) %}
+              <td class="py-2 px-4 border-b text-right">{{ summary.iloc[i]['sasaran_balita_eppgbm'] }}</td>
+              {% endfor %}
+            </tr>
+            <tr class="hover:bg-gray-50 transition duration-200 ease-in-out">
+              <td class="py-2 px-4 border-b font-medium">Balita Entry 2023</td>
+              {% for i in range(3) %}
+              <td class="py-2 px-4 border-b text-right">{{ summary.iloc[i]['balita_entry_2023'] }}</td>
+              {% endfor %}
+            </tr>
+            <tr class="hover:bg-gray-50 transition duration-200 ease-in-out">
+              <td class="py-2 px-4 border-b font-medium">Persentase</td>
+              {% for i in range(3) %}
+              <td class="py-2 px-4 border-b text-right">{{ summary.iloc[i]['persentase'] }}%</td>
+              {% endfor %}
+            </tr>
+            <tr class="hover:bg-gray-50 transition duration-200 ease-in-out">
+              <td class="py-2 px-4 border-b font-medium">Stunting</td>
+              {% for i in range(3) %}
+              <td class="py-2 px-4 border-b text-right">{{ summary.iloc[i]['stunting'] }}</td>
+              {% endfor %}
+            </tr>
+            <tr class="hover:bg-gray-50 transition duration-200 ease-in-out">
+              <td class="py-2 px-4 border-b font-medium">Wasting</td>
+              {% for i in range(3) %}
+              <td class="py-2 px-4 border-b text-right">{{ summary.iloc[i]['wasting'] }}</td>
+              {% endfor %}
+            </tr>
+            <tr class="hover:bg-gray-50 transition duration-200 ease-in-out">
+              <td class="py-2 px-4 border-b font-medium">Underweight</td>
+              {% for i in range(3) %}
+              <td class="py-2 px-4 border-b text-right">{{ summary.iloc[i]['underweight'] }}</td>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
